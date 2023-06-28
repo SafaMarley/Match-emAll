@@ -2,8 +2,8 @@ public enum State
 {
     Launched,
     LevelFailed,
-    LevelCompleted,
-    LevelCompletedHighScore
+    LevelCompleted
+    
 }
 
 public static class GameState

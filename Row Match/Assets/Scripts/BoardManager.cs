@@ -1,6 +1,8 @@
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class BoardBuilder : MonoSingleton<BoardBuilder>
+public class BoardManager : MonoSingleton<BoardManager>
 {
     [SerializeField] private BoardCell boardCellPrefab;
     private BoardCell[,] _boardCells;
@@ -14,6 +16,11 @@ public class BoardBuilder : MonoSingleton<BoardBuilder>
 
         BuildBoard();
         AssignCellNeighbours();
+    }
+
+    public BoardCell[] GetRow(int rowIndex)
+    {
+        return Enumerable.Range(0, _boardCells.GetLength(0)).Select(x => _boardCells[x, rowIndex]).ToArray();
     }
 
     private void BuildBoard()
@@ -68,5 +75,19 @@ public class BoardBuilder : MonoSingleton<BoardBuilder>
                 boardCell.AssignNeighbourCells(NeighbourCellDirection.Down, _boardCells[boardCell.coordinateX, boardCell.coordinateY - 1]);
             }
         }
+    }
+
+    public void EndLevel()
+    {
+        if (MatchManager.Instance.Score > PlayerPrefManager.GetHighScore(GameState.SelectedLevelInfo.LevelNumber))
+        {
+            GameState.CurrentGameState = State.LevelCompleted;
+        }
+        else
+        {
+            GameState.CurrentGameState = State.LevelFailed;
+        }
+            
+        SceneManager.LoadScene("Scenes/MainScene");
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpriteProvider : MonoSingleton<SpriteProvider>
+public class SpriteManager : MonoSingleton<SpriteManager>
 {
     [SerializeField] private Sprite itemRed;
     [SerializeField] private Sprite itemRedCheck;
@@ -14,7 +14,7 @@ public class SpriteProvider : MonoSingleton<SpriteProvider>
     [SerializeField] private Sprite itemYellow;
     [SerializeField] private Sprite itemYellowCheck;
 
-    public Sprite getItemImage(ItemType itemType)
+    public Sprite GetItemImage(ItemType itemType)
     {
         switch (itemType)
         {
@@ -26,6 +26,22 @@ public class SpriteProvider : MonoSingleton<SpriteProvider>
                 return itemBlue;
             case ItemType.Yellow:
                 return itemYellow;
+        }
+        return null;
+    }
+    
+    public Sprite GetItemCheckImage(ItemType itemType)
+    {
+        switch (itemType)
+        {
+            case ItemType.Red:
+                return itemRedCheck;
+            case ItemType.Green:
+                return itemGreenCheck;
+            case ItemType.Blue:
+                return itemBlueCheck;
+            case ItemType.Yellow:
+                return itemYellowCheck;
         }
         return null;
     }

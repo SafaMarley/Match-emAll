@@ -50,6 +50,12 @@ public class BoardCell : MonoBehaviour
     {
         return _neighbours.ContainsKey(neighbourCellDirection) ? _neighbours[neighbourCellDirection] : null;
     }
+
+    public void Deactivate()
+    {
+        isAvailable = false;
+        ItemInside.Deactivate();
+    }
     
     private void OnMouseExit()
     {

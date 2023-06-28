@@ -18,7 +18,7 @@ public class GameplayUIManager : MonoSingleton<GameplayUIManager>
 
     private void OnPlayerMove()
     {
-        movesLeftText.text = SwapManager.MoveCount.ToString();
+        movesLeftText.text = SwapManager.Instance.MoveCount.ToString();
     }
 
 

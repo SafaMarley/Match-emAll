@@ -9,6 +9,11 @@ public class Item : MonoBehaviour
     public void Initialize(ItemType itemType)
     {
         _itemType = itemType;
-        image.sprite = SpriteProvider.Instance.getItemImage(_itemType);
+        image.sprite = SpriteManager.Instance.GetItemImage(_itemType);
+    }
+
+    public void Deactivate()
+    {
+        image.sprite = SpriteManager.Instance.GetItemCheckImage(_itemType);
     }
 }

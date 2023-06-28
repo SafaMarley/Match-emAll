@@ -3,11 +3,12 @@ using UnityEngine;
 public class SwapManager : MonoSingleton<SwapManager>
 {
     [SerializeField] private Camera mainCamera;
-    public static int MoveCount;
+    private int _moveCount;
+    public int MoveCount { get => _moveCount; }
 
     public void Initialize(int moveCount)
     {
-        MoveCount = moveCount;
+        _moveCount = moveCount;
     }
     public void ExecuteSwapAction(BoardCell boardCell, Vector3 mouseExitScreenPosition)
     {
@@ -56,10 +57,16 @@ public class SwapManager : MonoSingleton<SwapManager>
     
     private void SwapItems(BoardCell cellToSwap1, BoardCell cellToSwap2)
     {
-        MoveCount--;
+        _moveCount--;
         EventManager.OnPlayerMove.Invoke();
         Item swapItem = cellToSwap1.ItemInside;
         cellToSwap1.SetItemInside(cellToSwap2.ItemInside);
         cellToSwap2.SetItemInside(swapItem);
+        MatchManager.Instance.CheckRowForMatch(cellToSwap1.coordinateY);
+        MatchManager.Instance.CheckRowForMatch(cellToSwap2.coordinateY);
+        if (MoveCount == 0)
+        {
+            BoardManager.Instance.EndLevel();
+        }
     }
 }
