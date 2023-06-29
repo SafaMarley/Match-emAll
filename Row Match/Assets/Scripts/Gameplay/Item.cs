@@ -6,10 +6,10 @@ namespace Gameplay
     public enum ItemType
     {
         None,
-        Red,
-        Green,
-        Blue,
-        Yellow
+        Red = 100,
+        Green = 150,
+        Blue = 200,
+        Yellow = 250
     }
     
     public class Item : MonoBehaviour

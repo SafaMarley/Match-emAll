@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Gameplay;
 using Managers.Base;
@@ -95,6 +96,40 @@ namespace Managers.LevelScene
             }
             
             SceneManager.LoadScene("Scenes/MainScene");
+        }
+
+        public void CheckIfBoardMatchable()
+        {
+            Dictionary<ItemType, int> matchableCellData = new Dictionary<ItemType, int>()
+            {
+                {ItemType.Red, 0},
+                {ItemType.Green, 0},
+                {ItemType.Blue, 0},
+                {ItemType.Yellow, 0}
+            };
+            
+            for (int i = 0; i < _levelInfo.GridHeight; i++)
+            {
+                for (int j = 0; j < _levelInfo.GridWidth; j++)
+                {
+                    if (!GetRow(i)[j].isAvailable)
+                    {
+                        foreach (var key in matchableCellData.Keys.ToList())
+                        {
+                            matchableCellData[key] = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (++matchableCellData[_boardCells[j, i].ItemInside.ItemType] == _levelInfo.GridWidth)
+                        {
+                            Debug.Log(_boardCells[j, i].ItemInside.ItemType);
+                            return;
+                        }
+                    }
+                }
+            }
+            EndLevel();
         }
     }
 }

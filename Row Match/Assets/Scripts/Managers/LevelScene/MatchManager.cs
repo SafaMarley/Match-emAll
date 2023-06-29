@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Gameplay;
 using Managers.Base;
 
@@ -6,14 +5,6 @@ namespace Managers.LevelScene
 {
     public class MatchManager : MonoSingleton<MatchManager>
     {
-        private readonly Dictionary<ItemType, int> _itemTypePoints = new Dictionary<ItemType, int>()
-        {
-            {ItemType.Red, 100},
-            {ItemType.Green, 150},
-            {ItemType.Blue, 200},
-            {ItemType.Yellow, 250}
-        };
-    
         private int _score;
         public int Score { get => _score; }
 
@@ -34,7 +25,7 @@ namespace Managers.LevelScene
 
             foreach (BoardCell boardCell in BoardManager.Instance.GetRow(index))
             {
-                _score += _itemTypePoints[itemType];
+                _score += (int) itemType;
                 EventManager.OnPlayerScore.Invoke();
                 boardCell.Deactivate();
             }
