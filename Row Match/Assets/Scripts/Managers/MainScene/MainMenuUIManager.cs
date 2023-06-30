@@ -100,9 +100,9 @@ namespace Managers.MainScene
         private void LevelsButtonActionOnComplete()
         {
             levelContentHoldersScrollRect.normalizedPosition = new Vector2(0, 1);
-            foreach (LevelInformationUI levelInformationUI in _levelInformationUIs)
+            for (int i = 0; i < _levelInformationUIs.Count; i++)
             {
-                LeanTween.scale(levelInformationUI.gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce();
+                LeanTween.scale(_levelInformationUIs[i].gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce().setDelay(i * .1f);
             }
         }
     
