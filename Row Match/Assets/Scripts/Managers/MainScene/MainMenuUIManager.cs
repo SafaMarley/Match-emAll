@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Gameplay;
 using Managers.Base;
 using Managers.LevelScene;
@@ -24,15 +24,25 @@ namespace Managers.MainScene
         [Header("Prefabs")]
         [SerializeField] private LevelInformationUI levelPrefab;
 
-        [Header("Needed Components")]
+        [Header("Required Components")]
         [SerializeField] private ScrollRect levelContentHoldersScrollRect;
         [SerializeField] private Text celebrationPanelHighScoreText;
+
+        [Header("Animation Speeds")]
+        private const float OpenPanelSpeed = .1f;
+        private const float ClosePanelSpeed = .1f;
+        private const float CelebrationPanelDuration = 5f;
+        private const float ButtonBounceDuration = .5f;
+
+        private List<LevelInformationUI> _levelInformationUIs = new List<LevelInformationUI>();
         
         public void Initialize()
         {
             //levelsPanelsOpenButton.onClick.AddListener(delegate { DisplayPanel(levelsPanel, LevelButtonActionOnComplete); } );
             //levelsPanelsExitButton.onClick.AddListener( delegate { HidePanel(levelsPanel); });
 
+            LeanTween.scale(levelsPanelsOpenButton.gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce();
+            
             levelsPanelsOpenButton.onClick.AddListener(DisplayLevelsPanel);
             levelsPanelsExitButton.onClick.AddListener(HideLevelsPanel);
             
@@ -58,66 +68,57 @@ namespace Managers.MainScene
         private void DisplayLevelsPanel()
         {
             levelsPanel.gameObject.SetActive(true);
-            LeanTween.scale(levelsPanel, Vector2.one, 0.1f)
+            LeanTween.scale(levelsPanel, Vector2.one, OpenPanelSpeed)
                 .setOnComplete(LevelsButtonActionOnComplete);
         }
 
         private void HideLevelsPanel()
         {
-            LeanTween.scale(levelsPanel, Vector2.zero, 0.1f).setOnComplete(() => levelsPanel.gameObject.SetActive(false));
+            LeanTween.scale(levelsPanel, Vector2.zero, ClosePanelSpeed).setOnComplete(() => levelsPanel.gameObject.SetActive(false));
+            foreach (LevelInformationUI levelInformationUI in _levelInformationUIs)
+            {
+                levelInformationUI.transform.localScale = Vector3.zero;
+            }
         }
         
         private void DisplayCelebrationPanel()
         {
             celebrationPanel.gameObject.SetActive(true);
-            LeanTween.scale(celebrationPanel, Vector2.one, 0.1f)
+            LeanTween.scale(celebrationPanel, Vector2.one, OpenPanelSpeed)
                 .setOnComplete(HideCelebrationPanel);
         }
         
         private void HideCelebrationPanel()
         {
-            LeanTween.scale(celebrationPanel, Vector2.zero, 0.1f).setDelay(10f).setOnComplete(() =>
+            LeanTween.scale(celebrationPanel, Vector2.zero, ClosePanelSpeed).setDelay(CelebrationPanelDuration).setOnComplete(() =>
             {
                 celebrationPanel.gameObject.SetActive(false);
                 DisplayLevelsPanel();
             });
         }
-        
-        /*
-        private void CelebrationButtonActionOnComplete()
-        {
-            HidePanel(celebrationPanel, () => DisplayPanel(levelsPanel, LevelButtonActionOnComplete));
-        }
-        */
 
         private void LevelsButtonActionOnComplete()
         {
             levelContentHoldersScrollRect.normalizedPosition = new Vector2(0, 1);
+            foreach (LevelInformationUI levelInformationUI in _levelInformationUIs)
+            {
+                LeanTween.scale(levelInformationUI.gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce();
+            }
         }
-
-        private void DisplayPanel(RectTransform rectTransform, Action actionOnComplete)
-        {
-            rectTransform.gameObject.SetActive(true);
-            LeanTween.scale(rectTransform, Vector2.one, 0.1f).setOnComplete(actionOnComplete);
-        }
-        
-        // private void HidePanel(RectTransform rectTransform)
-        // {
-        //     LeanTween.scale(rectTransform, Vector2.zero, 0.1f);
-        // }
-        //
-        // private void HidePanel(RectTransform rectTransform, Action actionOnComplete)
-        // {
-        //     LeanTween.scale(rectTransform, Vector3.zero, 0.1f).setDelay(3f).setOnComplete(() => rectTransform.gameObject.SetActive(false));
-        //     DisplayPanel(levelsPanel, LevelButtonActionOnComplete);
-        // }
     
         public void LoadLevelsToUI()
         {
             foreach (LevelInfo levelInfo in LevelManager.Instance.LevelInfos)
             {
-                Instantiate(levelPrefab, levelContentHolder).Initialize(levelInfo);
+                LevelInformationUI levelInformationUIInstance = Instantiate(levelPrefab, levelContentHolder);
+                _levelInformationUIs.Add(levelInformationUIInstance);
+                levelInformationUIInstance.Initialize(levelInfo);
             }
+        }
+
+        public void OnLevelButtonClicked()
+        {
+            LeanTween.scale(levelsPanel.gameObject, Vector2.zero, ClosePanelSpeed).setOnComplete(() => GameManager.Instance.OnPlayButtonClicked());
         }
     }
 }

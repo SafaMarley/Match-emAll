@@ -7,9 +7,17 @@ namespace Managers.LevelScene
 {
     public class GameplayUIManager : MonoSingleton<GameplayUIManager>
     {
+        [Header("GUI Text Boxes")]
+        [SerializeField] private RectTransform highScoreTextBox;
+        [SerializeField] private RectTransform scoreTextBox;
+        [SerializeField] private RectTransform movesLeftTextBox;
+        
+        [Header("GUI Texts")]
         [SerializeField] private Text highScoreText;
         [SerializeField] private Text scoreText;
         [SerializeField] private Text movesLeftText;
+
+        private const float GUIMoveTimer = .5f;
 
         private void OnEnable()
         {
@@ -35,11 +43,14 @@ namespace Managers.LevelScene
 
         public void Initialize()
         {
-            scoreText.text = "0";
-
             LevelInfo tempLevelInfo = GameState.SelectedLevelInfo;
             movesLeftText.text = tempLevelInfo.MoveCount.ToString();
             highScoreText.text = PlayerPrefManager.GetHighScore(tempLevelInfo.LevelNumber).ToString();
+            scoreText.text = "0";
+
+            LeanTween.moveLocalX(scoreTextBox.gameObject, -300, GUIMoveTimer).setEaseOutBounce();
+            LeanTween.moveLocalX(movesLeftTextBox.gameObject, 300, GUIMoveTimer).setEaseOutBounce();
+            LeanTween.moveLocalY(highScoreTextBox.gameObject, 750, GUIMoveTimer).setEaseOutBounce();
         }
     }
 }

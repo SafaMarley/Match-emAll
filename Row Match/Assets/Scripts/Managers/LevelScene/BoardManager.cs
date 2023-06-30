@@ -11,6 +11,7 @@ namespace Managers.LevelScene
     public class BoardManager : MonoSingleton<BoardManager>
     {
         [SerializeField] private BoardCell boardCellPrefab;
+        [SerializeField] private Transform boardTransform;
         private BoardCell[,] _boardCells;
         private static LevelInfo _levelInfo;
 
@@ -54,7 +55,7 @@ namespace Managers.LevelScene
                             itemType = ItemType.Yellow;
                             break;
                     }
-                    _boardCells[j, i] = Instantiate(boardCellPrefab, new Vector3(j * .5f - gridOffsetX, i * .5f - gridOffsetY), Quaternion.identity, transform);
+                    _boardCells[j, i] = Instantiate(boardCellPrefab, new Vector3(j * .5f - gridOffsetX, i * .5f - gridOffsetY), Quaternion.identity, boardTransform);
                     _boardCells[j, i].Initialize(j, i, itemType);
                 }
             }

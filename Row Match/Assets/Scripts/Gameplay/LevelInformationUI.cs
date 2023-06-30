@@ -33,7 +33,7 @@ namespace Gameplay
         private void OnLevelButtonClick()
         {
             GameState.SelectedLevelInfo = _levelInfo;
-            GameManager.Instance.OnPlayButtonClicked();
+            MainMenuUIManager.Instance.OnLevelButtonClicked();
         }
 
         private void ActivateSelf()
