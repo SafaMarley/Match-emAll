@@ -11,9 +11,11 @@ namespace Managers.MainScene
     {   
         [Header("Menu Buttons")]
         [SerializeField] private Button levelsButton;
+        [SerializeField] private Button celebrationContinueButton;
     
         [Header("Menu Panels")]
         [SerializeField] private RectTransform levelsPanel;
+        [SerializeField] private RectTransform celebrationPanel;
 
         [Header("LevelContentHolder")]
         [SerializeField] private RectTransform levelContentHolder;
@@ -24,15 +26,30 @@ namespace Managers.MainScene
         public void Initialize()
         {
             levelsButton.onClick.AddListener(DisplayLevelPanel);
+            celebrationContinueButton.onClick.AddListener(HideCelebrationPanel);
             if (GameState.CurrentGameState != State.Launched)
             {
                 DisplayLevelPanel();
+            }
+            if (GameState.CurrentGameState == State.LevelCompleted)
+            {
+                DisplayCelebrationPanel();
             }
         }
 
         private void DisplayLevelPanel()
         {
             levelsPanel.gameObject.SetActive(true);
+        }
+
+        private void DisplayCelebrationPanel()
+        {
+            celebrationPanel.gameObject.SetActive(true);
+        }
+        
+        private void HideCelebrationPanel()
+        {
+            celebrationPanel.gameObject.SetActive(false);
         }
     
         public void LoadLevelsToUI()

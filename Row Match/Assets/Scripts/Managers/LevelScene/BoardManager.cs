@@ -123,7 +123,6 @@ namespace Managers.LevelScene
                     {
                         if (++matchableCellData[_boardCells[j, i].ItemInside.ItemType] == _levelInfo.GridWidth)
                         {
-                            Debug.Log(_boardCells[j, i].ItemInside.ItemType);
                             return;
                         }
                     }
