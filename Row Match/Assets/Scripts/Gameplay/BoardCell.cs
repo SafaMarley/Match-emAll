@@ -41,7 +41,7 @@ namespace Gameplay
             _itemInside = itemInside;
             Transform itemInsideTransform = _itemInside.transform;
             itemInsideTransform.SetParent(transform);
-            itemInsideTransform.localPosition = Vector3.zero;
+            itemInsideTransform.LeanMoveLocal(Vector3.zero, 0.15f).setOnComplete(() => MatchManager.Instance.CheckRowForMatch(coordinateY));
         }
 
         public void AssignNeighbourCells(NeighbourCellDirection neighbourCellDirection, BoardCell boardCell)

@@ -1,3 +1,6 @@
+
+
+
 using Gameplay;
 using Managers.Base;
 
@@ -29,6 +32,7 @@ namespace Managers.LevelScene
                 EventManager.OnPlayerScore.Invoke();
                 boardCell.Deactivate();
             }
+            BoardManager.Instance.CheckIfBoardMatchable();
         }
     }
 }

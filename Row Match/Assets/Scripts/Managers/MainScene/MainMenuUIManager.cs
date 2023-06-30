@@ -1,3 +1,4 @@
+using System;
 using Gameplay;
 using Managers.Base;
 using Managers.LevelScene;
@@ -10,8 +11,8 @@ namespace Managers.MainScene
     public class MainMenuUIManager : MonoSingleton<MainMenuUIManager>
     {   
         [Header("Menu Buttons")]
-        [SerializeField] private Button levelsButton;
-        [SerializeField] private Button celebrationContinueButton;
+        [SerializeField] private Button levelsPanelsOpenButton;
+        [SerializeField] private Button levelsPanelsExitButton;
     
         [Header("Menu Panels")]
         [SerializeField] private RectTransform levelsPanel;
@@ -23,33 +24,47 @@ namespace Managers.MainScene
         [Header("Prefabs")]
         [SerializeField] private LevelInformationUI levelPrefab;
 
+        [Header("Needed Components")]
+        [SerializeField] private ScrollRect levelContentHoldersScrollRect;
+
         public void Initialize()
         {
-            levelsButton.onClick.AddListener(DisplayLevelPanel);
-            celebrationContinueButton.onClick.AddListener(HideCelebrationPanel);
-            if (GameState.CurrentGameState != State.Launched)
+            levelsPanelsOpenButton.onClick.AddListener(delegate { DisplayPanel(levelsPanel, LevelButtonActionOnComplete); } );
+            levelsPanelsExitButton.onClick.AddListener( delegate { HidePanel(levelsPanel); });
+            if (GameState.CurrentGameState == State.LevelFailed)
             {
-                DisplayLevelPanel();
+                DisplayPanel(levelsPanel, LevelButtonActionOnComplete);
             }
             if (GameState.CurrentGameState == State.LevelCompleted)
             {
-                DisplayCelebrationPanel();
+                DisplayPanel(celebrationPanel, CelebrationButtonActionOnComplete);
             }
         }
 
-        private void DisplayLevelPanel()
+        private void CelebrationButtonActionOnComplete()
         {
-            levelsPanel.gameObject.SetActive(true);
+            HidePanel(celebrationPanel, () => DisplayPanel(levelsPanel, LevelButtonActionOnComplete));
         }
 
-        private void DisplayCelebrationPanel()
+        private void LevelButtonActionOnComplete()
         {
-            celebrationPanel.gameObject.SetActive(true);
+            levelContentHoldersScrollRect.normalizedPosition = new Vector2(0, 1);
+        }
+
+        private void DisplayPanel(RectTransform rectTransform, Action actionOnComplete)
+        {
+            rectTransform.gameObject.SetActive(true);
+            LeanTween.scale(rectTransform, Vector2.one, 0.1f).setOnComplete(actionOnComplete);
         }
         
-        private void HideCelebrationPanel()
+        private void HidePanel(RectTransform rectTransform)
         {
-            celebrationPanel.gameObject.SetActive(false);
+            LeanTween.scale(rectTransform, Vector2.zero, 0.1f);
+        }
+
+        private void HidePanel(RectTransform rectTransform, Action actionOnComplete)
+        {
+            LeanTween.scale(rectTransform, Vector3.zero, 0.1f).setOnComplete(actionOnComplete).setOnComplete(() => rectTransform.gameObject.SetActive(false));
         }
     
         public void LoadLevelsToUI()

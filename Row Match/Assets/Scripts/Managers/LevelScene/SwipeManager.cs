@@ -66,13 +66,10 @@ namespace Managers.LevelScene
             Item swapItem = cellToSwap1.ItemInside;
             cellToSwap1.SetItemInside(cellToSwap2.ItemInside);
             cellToSwap2.SetItemInside(swapItem);
-            MatchManager.Instance.CheckRowForMatch(cellToSwap1.coordinateY);
-            MatchManager.Instance.CheckRowForMatch(cellToSwap2.coordinateY);
             if (MoveCount == 0)
             {
                 BoardManager.Instance.EndLevel();
             }
-            BoardManager.Instance.CheckIfBoardMatchable();
         }
     }
 }
