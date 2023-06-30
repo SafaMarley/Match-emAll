@@ -11,26 +11,32 @@ namespace Managers.LevelScene
     [Serializable]
     public struct LevelInfo
     {
-        public bool IsAccessible { get; }
+        private bool _isAccessible;
+        public bool IsAccessible { get => _isAccessible; set => _isAccessible = value; }
 
-        public int LevelNumber { get; }
+        private int _levelNumber;
+        public int LevelNumber { get => _levelNumber; }
 
-        public int GridWidth { get; }
+        private int _gridWidth;
+        public int GridWidth { get => _gridWidth; }
 
-        public int GridHeight { get; }
+        private int _gridHeight;
+        public int GridHeight { get => _gridHeight; }
 
-        public int MoveCount { get; }
+        private int _moveCount;
+        public int MoveCount { get => _moveCount; }
 
-        public string GridContent { get; }
+        private string _gridContent;
+        public string GridContent { get => _gridContent; }
 
         public LevelInfo(int levelNumber, int gridWidth, int gridHeight, int moveCount, string gridContent)
         {
-            IsAccessible = PlayerPrefManager.GetInt("PlayerLevel") >= levelNumber;
-            LevelNumber = levelNumber;
-            GridWidth = gridWidth;
-            GridHeight = gridHeight;
-            MoveCount = moveCount;
-            GridContent = gridContent;
+            _isAccessible = PlayerPrefManager.GetInt("PlayerLevel") >= levelNumber;
+            _levelNumber = levelNumber;
+            _gridWidth = gridWidth;
+            _gridHeight = gridHeight;
+            _moveCount = moveCount;
+            _gridContent = gridContent;
         }
     }
 

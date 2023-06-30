@@ -15,16 +15,6 @@ namespace Statics
         {
             PlayerPrefs.SetInt(key, value);
         }
-
-        public static string GetString(string key)
-        {
-            return PlayerPrefs.GetString(key);
-        }
-
-        public static void SetString(string key, string value)
-        {
-            PlayerPrefs.SetString(key, value);
-        }
     
         public static int GetHighScore(int levelNum)
         {

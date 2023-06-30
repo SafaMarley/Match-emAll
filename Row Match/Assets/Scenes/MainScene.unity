@@ -614,6 +614,7 @@ MonoBehaviour:
   levelContentHolder: {fileID: 775549776}
   levelPrefab: {fileID: -2412560990973270137, guid: 79360fd4d4e9923428cc199246259734, type: 3}
   levelContentHoldersScrollRect: {fileID: 1928413556}
+  celebrationPanelHighScoreText: {fileID: 1927331235}
 --- !u!114 &563302365
 MonoBehaviour:
   m_ObjectHideFlags: 0

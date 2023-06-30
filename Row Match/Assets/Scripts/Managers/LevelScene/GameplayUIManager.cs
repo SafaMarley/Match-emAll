@@ -7,6 +7,7 @@ namespace Managers.LevelScene
 {
     public class GameplayUIManager : MonoSingleton<GameplayUIManager>
     {
+        [SerializeField] private Text highScoreText;
         [SerializeField] private Text scoreText;
         [SerializeField] private Text movesLeftText;
 
@@ -35,7 +36,10 @@ namespace Managers.LevelScene
         public void Initialize()
         {
             scoreText.text = "0";
-            movesLeftText.text = GameState.SelectedLevelInfo.MoveCount.ToString();
+
+            LevelInfo tempLevelInfo = GameState.SelectedLevelInfo;
+            movesLeftText.text = tempLevelInfo.MoveCount.ToString();
+            highScoreText.text = PlayerPrefManager.GetHighScore(tempLevelInfo.LevelNumber).ToString();
         }
     }
 }

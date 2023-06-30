@@ -26,27 +26,71 @@ namespace Managers.MainScene
 
         [Header("Needed Components")]
         [SerializeField] private ScrollRect levelContentHoldersScrollRect;
-
+        [SerializeField] private Text celebrationPanelHighScoreText;
+        
         public void Initialize()
         {
-            levelsPanelsOpenButton.onClick.AddListener(delegate { DisplayPanel(levelsPanel, LevelButtonActionOnComplete); } );
-            levelsPanelsExitButton.onClick.AddListener( delegate { HidePanel(levelsPanel); });
+            //levelsPanelsOpenButton.onClick.AddListener(delegate { DisplayPanel(levelsPanel, LevelButtonActionOnComplete); } );
+            //levelsPanelsExitButton.onClick.AddListener( delegate { HidePanel(levelsPanel); });
+
+            levelsPanelsOpenButton.onClick.AddListener(DisplayLevelsPanel);
+            levelsPanelsExitButton.onClick.AddListener(HideLevelsPanel);
+            
             if (GameState.CurrentGameState == State.LevelFailed)
             {
-                DisplayPanel(levelsPanel, LevelButtonActionOnComplete);
+                DisplayLevelsPanel();
             }
             if (GameState.CurrentGameState == State.LevelCompleted)
             {
-                DisplayPanel(celebrationPanel, CelebrationButtonActionOnComplete);
+                int tempFinishedLevelNumber = GameState.SelectedLevelInfo.LevelNumber;
+                celebrationPanelHighScoreText.text = PlayerPrefManager.GetHighScore(tempFinishedLevelNumber).ToString();
+                if (tempFinishedLevelNumber < LevelManager.Instance.LevelInfos.Count && !LevelManager.Instance.LevelInfos[tempFinishedLevelNumber].IsAccessible)
+                {
+                    Debug.Log("Open up the next lock");
+                }
+                else
+                {
+                    DisplayCelebrationPanel();
+                }
             }
         }
+        
+        private void DisplayLevelsPanel()
+        {
+            levelsPanel.gameObject.SetActive(true);
+            LeanTween.scale(levelsPanel, Vector2.one, 0.1f)
+                .setOnComplete(LevelsButtonActionOnComplete);
+        }
 
+        private void HideLevelsPanel()
+        {
+            LeanTween.scale(levelsPanel, Vector2.zero, 0.1f).setOnComplete(() => levelsPanel.gameObject.SetActive(false));
+        }
+        
+        private void DisplayCelebrationPanel()
+        {
+            celebrationPanel.gameObject.SetActive(true);
+            LeanTween.scale(celebrationPanel, Vector2.one, 0.1f)
+                .setOnComplete(HideCelebrationPanel);
+        }
+        
+        private void HideCelebrationPanel()
+        {
+            LeanTween.scale(celebrationPanel, Vector2.zero, 0.1f).setDelay(10f).setOnComplete(() =>
+            {
+                celebrationPanel.gameObject.SetActive(false);
+                DisplayLevelsPanel();
+            });
+        }
+        
+        /*
         private void CelebrationButtonActionOnComplete()
         {
             HidePanel(celebrationPanel, () => DisplayPanel(levelsPanel, LevelButtonActionOnComplete));
         }
+        */
 
-        private void LevelButtonActionOnComplete()
+        private void LevelsButtonActionOnComplete()
         {
             levelContentHoldersScrollRect.normalizedPosition = new Vector2(0, 1);
         }
@@ -57,15 +101,16 @@ namespace Managers.MainScene
             LeanTween.scale(rectTransform, Vector2.one, 0.1f).setOnComplete(actionOnComplete);
         }
         
-        private void HidePanel(RectTransform rectTransform)
-        {
-            LeanTween.scale(rectTransform, Vector2.zero, 0.1f);
-        }
-
-        private void HidePanel(RectTransform rectTransform, Action actionOnComplete)
-        {
-            LeanTween.scale(rectTransform, Vector3.zero, 0.1f).setOnComplete(actionOnComplete).setOnComplete(() => rectTransform.gameObject.SetActive(false));
-        }
+        // private void HidePanel(RectTransform rectTransform)
+        // {
+        //     LeanTween.scale(rectTransform, Vector2.zero, 0.1f);
+        // }
+        //
+        // private void HidePanel(RectTransform rectTransform, Action actionOnComplete)
+        // {
+        //     LeanTween.scale(rectTransform, Vector3.zero, 0.1f).setDelay(3f).setOnComplete(() => rectTransform.gameObject.SetActive(false));
+        //     DisplayPanel(levelsPanel, LevelButtonActionOnComplete);
+        // }
     
         public void LoadLevelsToUI()
         {
