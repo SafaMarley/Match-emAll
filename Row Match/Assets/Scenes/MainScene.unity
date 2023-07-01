@@ -615,6 +615,7 @@ MonoBehaviour:
   levelPrefab: {fileID: -2412560990973270137, guid: 79360fd4d4e9923428cc199246259734, type: 3}
   levelContentHoldersScrollRect: {fileID: 1928413556}
   celebrationPanelHighScoreText: {fileID: 1927331235}
+  starImageTransform: {fileID: 1242166712}
 --- !u!114 &563302365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5976,7 +5977,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 15}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1242166713

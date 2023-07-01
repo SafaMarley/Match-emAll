@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Gameplay;
 using Managers.Base;
@@ -27,28 +28,34 @@ namespace Managers.MainScene
         [Header("Required Components")]
         [SerializeField] private ScrollRect levelContentHoldersScrollRect;
         [SerializeField] private Text celebrationPanelHighScoreText;
+        [SerializeField] private RectTransform starImageTransform;
 
         [Header("Animation Speeds")]
         private const float OpenPanelSpeed = .1f;
         private const float ClosePanelSpeed = .1f;
         private const float CelebrationPanelDuration = 5f;
         private const float ButtonBounceDuration = .5f;
+        private const float ButtonBounceDelay = .1f;
 
         private List<LevelInformationUI> _levelInformationUIs = new List<LevelInformationUI>();
         
         public void Initialize()
         {
-            //levelsPanelsOpenButton.onClick.AddListener(delegate { DisplayPanel(levelsPanel, LevelButtonActionOnComplete); } );
-            //levelsPanelsExitButton.onClick.AddListener( delegate { HidePanel(levelsPanel); });
-
             LeanTween.scale(levelsPanelsOpenButton.gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce();
+
+            levelsPanelsOpenButton.onClick.AddListener(delegate
+            {
+                DisplayPanel(levelsPanel, LevelPanelActivationOnComplete);
+            });
             
-            levelsPanelsOpenButton.onClick.AddListener(DisplayLevelsPanel);
-            levelsPanelsExitButton.onClick.AddListener(HideLevelsPanel);
+            levelsPanelsExitButton.onClick.AddListener(delegate
+            {
+                HidePanel(levelsPanel, LevelPanelDeactivationOnComplete);
+            });
             
             if (GameState.CurrentGameState == State.LevelFailed)
             {
-                DisplayLevelsPanel();
+                DisplayPanel(levelsPanel, LevelPanelActivationOnComplete);
             }
             if (GameState.CurrentGameState == State.LevelCompleted)
             {
@@ -57,53 +64,57 @@ namespace Managers.MainScene
                 if (tempFinishedLevelNumber < LevelManager.Instance.LevelInfos.Count && !LevelManager.Instance.LevelInfos[tempFinishedLevelNumber].IsAccessible)
                 {
                     Debug.Log("Open up the next lock");
+                    DisplayPanel(celebrationPanel, CelebrationPanelActivationOnComplete);
                 }
                 else
                 {
-                    DisplayCelebrationPanel();
+                    DisplayPanel(celebrationPanel, CelebrationPanelActivationOnComplete);
                 }
             }
         }
-        
-        private void DisplayLevelsPanel()
+
+        private void DisplayPanel(RectTransform transformToDisplay, Action chainAction, float delay = 0.0f)
         {
-            levelsPanel.gameObject.SetActive(true);
-            LeanTween.scale(levelsPanel, Vector2.one, OpenPanelSpeed)
-                .setOnComplete(LevelsButtonActionOnComplete);
+            transformToDisplay.gameObject.SetActive(true);
+            LeanTween.scale(transformToDisplay, Vector2.one, OpenPanelSpeed).setOnComplete(chainAction).setDelay(delay);
+        }
+        
+        private void HidePanel(RectTransform transformToDisplay, Action chainAction, float delay = 0.0f)
+        {
+            transformToDisplay.gameObject.SetActive(true);
+            LeanTween.scale(transformToDisplay, Vector2.zero, ClosePanelSpeed).setOnComplete( () =>
+            {
+                transformToDisplay.gameObject.SetActive(false);
+                chainAction();
+            }).setDelay(delay);
         }
 
-        private void HideLevelsPanel()
+        private void LevelPanelActivationOnComplete()
         {
-            LeanTween.scale(levelsPanel, Vector2.zero, ClosePanelSpeed).setOnComplete(() => levelsPanel.gameObject.SetActive(false));
+            levelContentHoldersScrollRect.normalizedPosition = new Vector2(0, 1);
+            for (int i = 0; i < _levelInformationUIs.Count; i++)
+            {
+                LeanTween.scale(_levelInformationUIs[i].gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce().setDelay(i * ButtonBounceDelay);
+            }
+        }
+        private void LevelPanelDeactivationOnComplete()
+        {
             foreach (LevelInformationUI levelInformationUI in _levelInformationUIs)
             {
                 levelInformationUI.transform.localScale = Vector3.zero;
             }
         }
         
-        private void DisplayCelebrationPanel()
+        private void CelebrationPanelActivationOnComplete()
         {
-            celebrationPanel.gameObject.SetActive(true);
-            LeanTween.scale(celebrationPanel, Vector2.one, OpenPanelSpeed)
-                .setOnComplete(HideCelebrationPanel);
+            LeanTween.scale(starImageTransform.gameObject, Vector2.one * 2.5f, 1f).setEase(LeanTweenType.easeOutElastic).setOnComplete(() => 
+                LeanTween.scale(starImageTransform.gameObject, Vector2.one, 1f).setDelay(1f).setEase(LeanTweenType.easeInOutElastic));
+            HidePanel(celebrationPanel, CelebrationPanelDeactivationOnComplete, CelebrationPanelDuration);
         }
         
-        private void HideCelebrationPanel()
+        private void CelebrationPanelDeactivationOnComplete()
         {
-            LeanTween.scale(celebrationPanel, Vector2.zero, ClosePanelSpeed).setDelay(CelebrationPanelDuration).setOnComplete(() =>
-            {
-                celebrationPanel.gameObject.SetActive(false);
-                DisplayLevelsPanel();
-            });
-        }
-
-        private void LevelsButtonActionOnComplete()
-        {
-            levelContentHoldersScrollRect.normalizedPosition = new Vector2(0, 1);
-            for (int i = 0; i < _levelInformationUIs.Count; i++)
-            {
-                LeanTween.scale(_levelInformationUIs[i].gameObject, Vector2.one, ButtonBounceDuration).setEaseOutBounce().setDelay(i * .1f);
-            }
+            DisplayPanel(levelsPanel, LevelPanelActivationOnComplete);
         }
     
         public void LoadLevelsToUI()
