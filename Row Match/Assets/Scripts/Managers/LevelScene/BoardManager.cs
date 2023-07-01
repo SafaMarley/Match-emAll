@@ -33,8 +33,9 @@ namespace Managers.LevelScene
         private void BuildBoard()
         {
             _boardCells = new BoardCell[_levelInfo.GridWidth, _levelInfo.GridHeight];
-            float gridOffsetX = _levelInfo.GridWidth / 4f - .25f;
-            float gridOffsetY = _levelInfo.GridHeight / 4f - .25f;
+            Vector2 boardCellSizeOffset = boardCellPrefab.GetComponent<BoxCollider2D>().size;
+            float gridOffsetX = _levelInfo.GridWidth * boardCellSizeOffset.x / 2f - boardCellSizeOffset.x / 2f;
+            float gridOffsetY = _levelInfo.GridHeight * boardCellSizeOffset.y / 2f - boardCellSizeOffset.y / 2f;
             for (int i = 0; i < _levelInfo.GridHeight; i++)
             {
                 for (int j = 0; j < _levelInfo.GridWidth; j++)
@@ -55,7 +56,7 @@ namespace Managers.LevelScene
                             itemType = ItemType.Yellow;
                             break;
                     }
-                    _boardCells[j, i] = Instantiate(boardCellPrefab, new Vector3(j * .5f - gridOffsetX, i * .5f - gridOffsetY), Quaternion.identity, boardTransform);
+                    _boardCells[j, i] = Instantiate(boardCellPrefab, new Vector3(j * boardCellSizeOffset.x - gridOffsetX, i * boardCellSizeOffset.y - gridOffsetY), Quaternion.identity, boardTransform);
                     _boardCells[j, i].Initialize(j, i, itemType);
                 }
             }

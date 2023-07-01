@@ -48,9 +48,9 @@ namespace Managers.LevelScene
             highScoreText.text = PlayerPrefManager.GetHighScore(tempLevelInfo.LevelNumber).ToString();
             scoreText.text = "0";
 
-            LeanTween.moveLocalX(scoreTextBox.gameObject, -300, GUIMoveTimer).setEaseOutBounce();
-            LeanTween.moveLocalX(movesLeftTextBox.gameObject, 300, GUIMoveTimer).setEaseOutBounce();
-            LeanTween.moveLocalY(highScoreTextBox.gameObject, 750, GUIMoveTimer).setEaseOutBounce();
+            LeanTween.moveLocalX(scoreTextBox.gameObject, -250, GUIMoveTimer).setEaseOutBounce();
+            LeanTween.moveLocalX(movesLeftTextBox.gameObject, 250, GUIMoveTimer).setEaseOutBounce();
+            LeanTween.moveLocalY(highScoreTextBox.gameObject, -700, GUIMoveTimer).setEaseOutBounce();
         }
     }
 }
