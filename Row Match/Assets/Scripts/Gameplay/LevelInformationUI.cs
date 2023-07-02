@@ -36,7 +36,7 @@ namespace Gameplay
             MainMenuUIManager.Instance.OnLevelButtonClicked();
         }
 
-        private void ActivateSelf()
+        public void ActivateSelf()
         {
             highScoreText.text = "High Score: " + PlayerPrefManager.GetHighScore(_levelInfo.LevelNumber);
             playButton.interactable = true;

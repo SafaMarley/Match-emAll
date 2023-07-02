@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Gameplay;
 using Managers.Base;
 using Managers.MainScene;
 using Statics;
@@ -31,12 +32,17 @@ namespace Managers.LevelScene
 
         public LevelInfo(int levelNumber, int gridWidth, int gridHeight, int moveCount, string gridContent)
         {
-            _isAccessible = PlayerPrefManager.GetInt("PlayerLevel") >= levelNumber;
+            _isAccessible = PlayerPrefManager.GetPlayerLevel() >= levelNumber;
             _levelNumber = levelNumber;
             _gridWidth = gridWidth;
             _gridHeight = gridHeight;
             _moveCount = moveCount;
             _gridContent = gridContent;
+        }
+
+        public void ActivateLevel()
+        {
+            IsAccessible = true;
         }
     }
 

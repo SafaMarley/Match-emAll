@@ -10,14 +10,14 @@ namespace Managers.MainScene
     {
         void Start()
         {
-            if (PlayerPrefManager.GetInt("PlayerLevel") == 0)
+            if (PlayerPrefManager.GetPlayerLevel() == 0)
             {
-                PlayerPrefManager.SetInt("PlayerLevel", 1);
+                PlayerPrefManager.SetPlayerLevel();
             }
 
             LevelManager.Instance.LoadLevelsFromProject();
 
-            if (PlayerPrefManager.GetInt("LevelsReady") == 0 && Application.internetReachability != NetworkReachability.NotReachable)
+            if (PlayerPrefManager.GetLevelStatus() == 0 && Application.internetReachability != NetworkReachability.NotReachable)
             {
                 DownloadManager.Instance.BeginDownload();
             }

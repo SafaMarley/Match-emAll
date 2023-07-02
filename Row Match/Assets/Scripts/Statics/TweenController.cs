@@ -9,15 +9,15 @@ namespace Statics
         private const float ClosePanelSpeed = .1f;
         private const float GUIMoveTimer = .5f;
         
-        public static void DisplayInGameGUI(GameObject transformToMove, float positionTo, bool onXAxis, Action chainAction, float delay = 0f)
+        public static void DisplayInGameGUI(GameObject transformToMove, float positionTo, bool onXAxis, Action chainAction, LeanTweenType easeType = LeanTweenType.linear, float delay = 0f)
         {
             if (onXAxis)
             {
-                LeanTween.moveLocalX(transformToMove, positionTo, GUIMoveTimer).setEaseOutBounce().setDelay(delay).setOnComplete(chainAction);
+                LeanTween.moveLocalX(transformToMove, positionTo, GUIMoveTimer).setEase(easeType).setDelay(delay).setOnComplete(chainAction);
             }
             else
             {
-                LeanTween.moveLocalY(transformToMove, positionTo, GUIMoveTimer).setEaseOutBounce().setDelay(delay).setOnComplete(chainAction);
+                LeanTween.moveLocalY(transformToMove, positionTo, GUIMoveTimer).setEase(easeType).setDelay(delay).setOnComplete(chainAction);
             }
         }
         

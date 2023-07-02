@@ -33,8 +33,7 @@ namespace Managers.MainScene
         private const float ButtonBounceDelay = .1f;
         
         private List<LevelInformationUI> _levelInformationUIs = new List<LevelInformationUI>();
-        
-        
+
         public void Initialize()
         {
             TweenController.DisplayPanel(levelsPanelsOpenButton.gameObject, .5f);
@@ -60,7 +59,9 @@ namespace Managers.MainScene
                 celebrationPanelHighScoreText.text = PlayerPrefManager.GetHighScore(tempFinishedLevelNumber).ToString();
                 if (tempFinishedLevelNumber < LevelManager.Instance.LevelInfos.Count && !LevelManager.Instance.LevelInfos[tempFinishedLevelNumber].IsAccessible)
                 {
-                    Debug.Log("Open up the next lock");
+                    LevelManager.Instance.LevelInfos[tempFinishedLevelNumber].ActivateLevel();
+                    _levelInformationUIs[tempFinishedLevelNumber].ActivateSelf();
+                    PlayerPrefManager.PlayerLevelUp();
                     TweenController.DisplayPanel(celebrationPanel.gameObject, CelebrationPanelActivationOnComplete);
                 }
                 else

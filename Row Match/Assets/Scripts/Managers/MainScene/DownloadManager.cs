@@ -78,7 +78,7 @@ namespace Managers.MainScene
             _filesReady++;
             if (_filesToPrepare == _filesReady)
             {
-                PlayerPrefManager.SetInt("LevelsReady", 1);
+                PlayerPrefManager.SetLevelStatus();
                 LevelManager.Instance.LoadLevelsFromPersistent();
             }
         }
