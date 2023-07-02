@@ -27,6 +27,7 @@ namespace Gameplay
         public void Deactivate()
         {
             image.sprite = SpriteManager.Instance.GetItemCheckImage(_itemType);
+            LeanTween.scale(image.gameObject, Vector2.one * 3f, 0.5f).setEaseOutElastic();
         }
     }
 }

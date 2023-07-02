@@ -130,7 +130,7 @@ namespace Managers.LevelScene
                     }
                 }
             }
-            EndLevel();
+            GameplayUIManager.Instance.DisplayLevelEndUI("There is no more cell to match on the board!");
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Managers.LevelScene
             cellToSwap2.SetItemInside(swapItem);
             if (MoveCount == 0)
             {
-                BoardManager.Instance.EndLevel();
+                GameplayUIManager.Instance.DisplayLevelEndUI("No more moves to swipe!");
             }
         }
     }

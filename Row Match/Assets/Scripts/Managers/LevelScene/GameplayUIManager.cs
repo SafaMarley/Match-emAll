@@ -11,14 +11,14 @@ namespace Managers.LevelScene
         [SerializeField] private RectTransform highScoreTextBox;
         [SerializeField] private RectTransform scoreTextBox;
         [SerializeField] private RectTransform movesLeftTextBox;
+        [SerializeField] private RectTransform gameOverTextBox;
         
         [Header("GUI Texts")]
         [SerializeField] private Text highScoreText;
         [SerializeField] private Text scoreText;
         [SerializeField] private Text movesLeftText;
-
-        private const float GUIMoveTimer = .5f;
-
+        [SerializeField] private Text gameOverText;
+        
         private void OnEnable()
         {
             EventManager.OnPlayerMove += OnPlayerMove;
@@ -48,9 +48,16 @@ namespace Managers.LevelScene
             highScoreText.text = PlayerPrefManager.GetHighScore(tempLevelInfo.LevelNumber).ToString();
             scoreText.text = "0";
 
-            LeanTween.moveLocalX(scoreTextBox.gameObject, -250, GUIMoveTimer).setEaseOutBounce();
-            LeanTween.moveLocalX(movesLeftTextBox.gameObject, 250, GUIMoveTimer).setEaseOutBounce();
-            LeanTween.moveLocalY(highScoreTextBox.gameObject, -700, GUIMoveTimer).setEaseOutBounce();
+            TweenController.DisplayInGameGUI(scoreTextBox.gameObject, -250, true, null);
+            TweenController.DisplayInGameGUI(movesLeftTextBox.gameObject, 250, true, null);
+            TweenController.DisplayInGameGUI(highScoreTextBox.gameObject, -700, false, null);
+        }
+        
+        public void DisplayLevelEndUI(string endReason)
+        {
+            gameOverText.text = endReason;
+            TweenController.DisplayInGameGUI(gameOverTextBox.gameObject, 0, true, null);
+            TweenController.DisplayInGameGUI(gameOverTextBox.gameObject, 1000, true, () => BoardManager.Instance.EndLevel(), 2f);
         }
     }
 }
