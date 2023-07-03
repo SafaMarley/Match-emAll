@@ -1,1 +1,1 @@
-# Match'em All
+# Match'em All is a casual matching game.
