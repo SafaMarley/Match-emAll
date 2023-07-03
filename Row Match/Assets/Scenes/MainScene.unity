@@ -685,14 +685,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aeb2739fead5aa44b1bcd00ea68d437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  downloadURLBase: https://row-match.s3.amazonaws.com/levels/RM_
-  levelInfosList:
-  - levelTag: A
-    levelCountFrom: 11
-    levelCountTo: 15
-  - levelTag: B
-    levelCountFrom: 1
-    levelCountTo: 10
+  downloadURLBase: 
+  levelInfosList: []
 --- !u!114 &563302364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,8 +703,8 @@ MonoBehaviour:
   levelsPanelsExitButton: {fileID: 1079449759}
   levelsPanel: {fileID: 1713360688}
   celebrationPanel: {fileID: 1381723625}
-  levelContentHolder: {fileID: 775549776}
   levelPrefab: {fileID: -2412560990973270137, guid: 79360fd4d4e9923428cc199246259734, type: 3}
+  levelContentHolder: {fileID: 775549776}
   levelContentHoldersScrollRect: {fileID: 1928413556}
   celebrationPanelHighScoreText: {fileID: 1927331235}
   starImageTransform: {fileID: 1242166712}

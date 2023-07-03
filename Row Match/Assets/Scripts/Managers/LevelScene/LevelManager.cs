@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Gameplay;
 using Managers.Base;
 using Managers.MainScene;
 using Statics;
@@ -62,8 +61,12 @@ namespace Managers.LevelScene
                     AddLevelsFromFile(levelFiles);
                 }
             }
+            //==== For Offline mode only
+            _levelInfos.Sort((level1, level2) => level1.LevelNumber.CompareTo(level2.LevelNumber));
+            MainMenuUIManager.Instance.LoadLevelsToUI();
+            //==== For Offline mode only
         }
-
+        
         public void LoadLevelsFromPersistent()
         {
             string persistentLevelsPath = Application.persistentDataPath;

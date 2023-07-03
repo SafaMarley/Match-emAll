@@ -1,7 +1,6 @@
 using Managers.Base;
 using Managers.LevelScene;
 using Statics;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Managers.MainScene
@@ -16,7 +15,8 @@ namespace Managers.MainScene
             }
 
             LevelManager.Instance.LoadLevelsFromProject();
-
+            
+            /*
             if (PlayerPrefManager.GetLevelStatus() == 0 && Application.internetReachability != NetworkReachability.NotReachable)
             {
                 DownloadManager.Instance.BeginDownload();
@@ -25,6 +25,7 @@ namespace Managers.MainScene
             {
                 LevelManager.Instance.LoadLevelsFromPersistent();
             }
+            */
         
             MainMenuUIManager.Instance.Initialize();
         }
